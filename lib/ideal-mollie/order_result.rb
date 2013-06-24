@@ -48,5 +48,17 @@ module IdealMollie
         @customer_city = consumer["consumerCity"].to_s if consumer.has_key?("consumerCity")
       end
     end
+
+    #
+    # Serialize all known attributes into a hash
+    #
+    # @return [Hash] All result attributes
+    def serializable_hash
+      methods = %w[transaction_id amount currency paid message customer_name customer_account customer_city].map(&:to_sym)
+      methods.reduce(Hash.new) do |hash, method|
+        hash[method] = self.send(method)
+        hash
+      end
+    end
   end
 end
