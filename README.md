@@ -137,7 +137,7 @@ end
 ```erb
 <%= form_tag transaction_start_path, :method => :post do %>
   <%= select_tag "bank_id", options_from_collection_for_select(@banks, "id", "name") %>
-  <%= button_submit_tag "Checkout" %>
+  <%= submit_tag "Checkout" %>
 <% end %>
 ```
 
