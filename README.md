@@ -40,8 +40,8 @@ Add the following config parameters to your environment config file
 
 ```ruby
 config.ideal_mollie.partner_id = 123456
-config.ideal_mollie.report_url = "http://example.org/report"
-config.ideal_mollie.return_url = "http://example.org/return"
+config.ideal_mollie.report_url = "http://example.org/transactions/report"
+config.ideal_mollie.return_url = "http://example.org/transactions/return"
 config.ideal_mollie.test_mode = false
 ```
 
@@ -94,7 +94,7 @@ class TransactionsController < ApplicationController
     redirect_to request.url
   end
 
-  def check
+  def report
     transaction_id = params[:transaction_id]
     response = IdealMollie.check_order(transaction_id)
 
@@ -118,7 +118,7 @@ class TransactionsController < ApplicationController
     render :nothing => true
   end
 
-  def result
+  def return
     transaction_id = params[:transaction_id]
     # TODO show the result
     # For example:
@@ -139,6 +139,17 @@ end
   <%= select_tag "bank_id", options_from_collection_for_select(@banks, "id", "name") %>
   <%= submit_tag "Checkout" %>
 <% end %>
+```
+
+### Routes
+
+```ruby
+controller :transactions do
+  get '/transactions', action: :index
+  post '/transactions', action: :start, as: :transaction_start
+  get '/transactions/return', action: :return, as: :transaction_return
+  get '/transactions/report', action: :report, as: :transaction_report
+end
 ```
 
 ## Changelog
